@@ -57,8 +57,8 @@
             background-image: linear-gradient(to top, #141414, transparent 50%),
                   url('images/accueil.jpg');
             background-size: cover;
-            /* AJOUT ICI : Empêche l'image de se répéter si l'écran est trop grand */
-            background-repeat: no-repeat; 
+            /* MODIFICATION 1 : Empêche la répétition de l'image sur tous les écrans */
+            background-repeat: no-repeat;
             background-position: center 78%; 
             display: flex;
             align-items: center;
@@ -90,6 +90,8 @@
             font-weight: bold;
             margin-bottom: 15px;
             display: inline-block;
+            /* MODIFICATION 2 : Ajout d'une ombre noire forte pour lire sur la neige */
+            text-shadow: 0px 1px 5px rgba(0, 0, 0, 0.9);
         }
 
         .btn-container {
@@ -271,11 +273,9 @@
         }
 
         .video-overlay video {
-            /* PC & Tablettes : On limite la hauteur pour ne pas scroller */
             height: 85vh; 
-            width: auto; /* La largeur s'adapte */
+            width: auto;
             max-width: 100%;
-            
             border-radius: 10px;
             box-shadow: 0 0 50px rgba(229, 9, 20, 0.4);
             border: 2px solid rgba(255, 255, 255, 0.1); 
@@ -303,7 +303,7 @@
 
         /* --- STYLE DU CARROUSEL (GALERIE) --- */
         .modal-image-container {
-            position: relative; /* Pour placer les flèches par dessus */
+            position: relative;
             width: 100%;
             height: 300px;
         }
@@ -337,13 +337,14 @@
 
         /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
-            /* Amélioration du hero sur mobile */
+            /* MODIFICATION 3 : Amélioration mobile */
             .hero {
-                background-position: center 65%; /* Meilleur cadrage vertical */
-                /* CORRECTION ICI : On utilise cover au lieu de 150% pour remplir sans répéter */
+                /* On utilise 'cover' pour remplir tout l'écran sans répéter */
                 background-size: cover; 
-                align-items: flex-end; /* Pousse le contenu vers le bas */
-                padding-bottom: 40px; /* Espace en bas pour le contenu */
+                /* On centre l'image */
+                background-position: center center; 
+                align-items: flex-end;
+                padding-bottom: 40px;
                 padding-left: 5%;
                 padding-right: 5%;
             }
@@ -369,39 +370,24 @@
             .card { width: 160px; height: 90px; }
             .modal-img { height: 200px; }
             
-            /* Optimisation vidéo verticale sur mobile */
             .video-overlay video {
                 height: auto;
-                width: 95%; /* Prend presque toute la largeur */
-                max-height: 80vh; /* Laisse de la place pour le bouton fermer en haut */
+                width: 95%;
+                max-height: 80vh;
             }
         }
 
         /* Pour les très petits écrans */
         @media (max-width: 480px) {
             .hero {
-                /* CORRECTION ICI AUSSI : Cover pour être sûr */
                 background-size: cover; 
-                background-position: center 65%;
+                background-position: center center;
             }
             
-            .hero-title {
-                font-size: 40px;
-            }
-            
-            .hero-desc {
-                font-size: 0.9rem;
-            }
-            
-            .btn-container {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .hero-title { font-size: 40px; }
+            .hero-desc { font-size: 0.9rem; }
+            .btn-container { flex-direction: column; gap: 10px; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -447,11 +433,8 @@
             <div class="card" 
             data-title="La première balade avec maman" 
             data-desc="Nous sommes allés à Chantilly et nous avons mangés des crêpes dans un restaurant rempli de coréens !" 
-            
             data-img="images/4.jpg"
-            
             data-gallery="images/4.jpg, images/5.jpg">
-            
             <img src="images/4.jpg" alt="Date">
             </div>
 
@@ -544,7 +527,6 @@
         </div>
     </section>
 
-
     <div class="modal-overlay" id="modal">
         <div class="modal-content">
             <button class="close-btn" id="closeBtn"><i class="fas fa-times"></i></button>
@@ -579,7 +561,6 @@
     </div>
 
     <script>
-        // --- LOGIQUE POP-UP AVEC GALERIE ---
         const modal = document.getElementById('modal');
         const closeBtn = document.getElementById('closeBtn');
         const modalImg = document.getElementById('modalImg');
@@ -589,15 +570,11 @@
         const nextBtn = document.getElementById('nextBtn');
         const cards = document.querySelectorAll('.card');
 
-        // Variables pour gérer la galerie
-        let currentGallery = []; // Liste des images actuelles
-        let currentIndex = 0;    // Quelle image on regarde (0 = la première)
+        let currentGallery = []; 
+        let currentIndex = 0;    
 
-        // Fonction pour mettre à jour l'image affichée
         function updateGalleryImage() {
             modalImg.src = currentGallery[currentIndex];
-            
-            // Si on a plus d'une image, on affiche les flèches, sinon on cache
             if (currentGallery.length > 1) {
                 prevBtn.style.display = 'flex';
                 nextBtn.style.display = 'flex';
@@ -607,28 +584,19 @@
             }
         }
 
-        // Clic sur une carte
         cards.forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
                 const desc = card.getAttribute('data-desc');
-                
-                // NOUVEAU : On récupère la liste d'images (séparées par des virgules)
-                // Si data-gallery existe on l'utilise, sinon on prend data-img
                 const galleryAttr = card.getAttribute('data-gallery') || card.getAttribute('data-img');
                 
-                // On transforme le texte "img1.jpg, img2.jpg" en liste ["img1.jpg", "img2.jpg"]
-                // .split(',') coupe à la virgule, .map(...) enlève les espaces inutiles
                 currentGallery = galleryAttr.split(',').map(img => img.trim());
-                
-                currentIndex = 0; // On remet au début
+                currentIndex = 0; 
 
-                // Remplissage
                 modalTitle.textContent = title;
                 modalDesc.textContent = desc;
-                updateGalleryImage(); // Affiche la première image
+                updateGalleryImage(); 
 
-                // Ouverture
                 modal.style.display = 'flex';
                 setTimeout(() => {
                     modal.style.opacity = '1';
@@ -637,25 +605,22 @@
             });
         });
 
-        // Clic sur Flèche Suivante
         nextBtn.addEventListener('click', () => {
             currentIndex++;
             if (currentIndex >= currentGallery.length) {
-                currentIndex = 0; // Retour au début (boucle)
+                currentIndex = 0; 
             }
             updateGalleryImage();
         });
 
-        // Clic sur Flèche Précédente
         prevBtn.addEventListener('click', () => {
             currentIndex--;
             if (currentIndex < 0) {
-                currentIndex = currentGallery.length - 1; // Va à la dernière image
+                currentIndex = currentGallery.length - 1; 
             }
             updateGalleryImage();
         });
 
-        // Fermeture
         function closeModal() {
             modal.style.opacity = '0';
             modal.querySelector('.modal-content').style.transform = 'scale(0.8)';
@@ -664,8 +629,6 @@
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-        // --- LOGIQUE VIDÉO ---
-        // Maintenant que le script est en bas, il va trouver ces éléments !
         const videoOverlay = document.getElementById('videoOverlay');
         const myVideo = document.getElementById('myVideo');
 
