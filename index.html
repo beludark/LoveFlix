@@ -335,7 +335,34 @@
 
         /* --- RESPONSIVE MOBILE --- */
         @media (max-width: 768px) {
-            .hero-title { font-size: 50px; }
+            /* Amélioration du hero sur mobile */
+            .hero {
+                background-position: center 65%; /* Meilleur cadrage vertical */
+                background-size: 150%; /* Zoom sur l'image pour mieux voir le couple */
+                align-items: flex-end; /* Pousse le contenu vers le bas */
+                padding-bottom: 40px; /* Espace en bas pour le contenu */
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+            
+            .hero-content {
+                margin-top: 0;
+                max-width: 100%;
+            }
+            
+            .hero-title { 
+                font-size: 50px;
+            }
+            
+            .hero-desc {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                font-size: 1rem;
+                padding: 8px 20px;
+            }
+            
             .card { width: 160px; height: 90px; }
             .modal-img { height: 200px; }
             
@@ -344,6 +371,32 @@
                 height: auto;
                 width: 95%; /* Prend presque toute la largeur */
                 max-height: 80vh; /* Laisse de la place pour le bouton fermer en haut */
+            }
+        }
+
+        /* Pour les très petits écrans */
+        @media (max-width: 480px) {
+            .hero {
+                background-size: 180%; /* Encore plus de zoom sur très petits écrans */
+                background-position: center 62%;
+            }
+            
+            .hero-title {
+                font-size: 40px;
+            }
+            
+            .hero-desc {
+                font-size: 0.9rem;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -630,5 +683,4 @@
         }
     </script>
 </body>
-
 </html>
